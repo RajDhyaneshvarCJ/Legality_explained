@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Legal Document Explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f4ee;
+    --surface: #fffdf9;
+    --ink: #1c2420;
+    --ink-soft: #565e58;
+    --ink-faint: #939a93;
+    --rule: #e2ded2;
+    --rule-soft: #edeae0;
+    --blue: #234a78;
+    --blue-hover: #1b3b61;
+    --blue-soft: #eef2f7;
+    --wax: #98352b;
+    --wax-bg: #f9f1ee;
+    --badge-bg: #eceadf;
+    --shadow: 0 1px 2px rgba(28,36,32,0.05), 0 8px 24px rgba(28,36,32,0.04);
+    --serif: 'Libre Caslon Text', Georgia, serif;
+    --sans: 'Public Sans', -apple-system, system-ui, sans-serif;
+  }
+
+  [data-theme="dark"] {
+    --paper: #141814;
+    --surface: #1c211d;
+    --ink: #ebe8df;
+    --ink-soft: #a6aca4;
+    --ink-faint: #6b716a;
+    --rule: #2c322c;
+    --rule-soft: #242a24;
+    --blue: #8db0d9;
+    --blue-hover: #a3c1e4;
+    --blue-soft: #1f2730;
+    --wax: #d18a7d;
+    --wax-bg: #281e1b;
+    --badge-bg: #262c26;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.25s, color 0.25s;
+  }
+
+  .app { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+
+  button, select, input, textarea { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 2px; }
+
+  /* ---------- header ---------- */
+  .masthead { margin-bottom: 2.75rem; }
+  .masthead-top {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem;
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px;
+  }
+  .masthead h1 {
+    font-family: var(--serif);
+    font-size: clamp(28px, 5vw, 36px);
+    font-weight: 400; line-height: 1.15; letter-spacing: -0.01em;
+    margin-bottom: 12px;
+  }
+  .masthead .lede {
+    font-size: 15px; color: var(--ink-soft); max-width: 520px; line-height: 1.65;
+  }
+  .masthead .lede em { font-family: var(--serif); font-style: italic; }
+  .masthead-rule {
+    margin-top: 1.75rem; border: 0; height: 1px;
+    background: linear-gradient(to right, var(--ink) 0 48px, var(--rule) 48px);
+  }
+
+  /* theme toggle */
+  .header-controls { display: flex; align-items: center; gap: 16px; margin-top: 4px; flex-shrink: 0; }
+  .link-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 12px; font-weight: 600; color: var(--ink-faint);
+    padding: 4px 0; transition: color 0.15s;
+  }
+  .link-btn:hover { color: var(--wax); }
+  .theme-toggle {
+    display: flex; align-items: center; gap: 8px;
+    cursor: pointer; flex-shrink: 0; user-select: none;
+    background: none; border: none; color: var(--ink-faint); font-size: 12px;
+  }
+  .toggle-track {
+    width: 36px; height: 20px; background: var(--rule);
+    border-radius: 10px; position: relative; transition: background 0.2s;
+  }
+  .toggle-thumb {
+    width: 14px; height: 14px; background: var(--surface);
+    border-radius: 50%; position: absolute; top: 3px; left: 3px;
+    transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  }
+  [data-theme="dark"] .toggle-thumb { transform: translateX(16px); }
+  [data-theme="dark"] .toggle-track { background: #3a403a; }
+
+  /* ---------- input sheet ---------- */
+  .sheet {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    box-shadow: var(--shadow);
+  }
+  .intake { padding: 1.75rem; }
+
+  .upload-zone {
+    border: 1px dashed var(--rule);
+    border-radius: 4px;
+    padding: 2.25rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--blue); background: var(--blue-soft);
+  }
+  .upload-icon { display: block; margin: 0 auto 12px; color: var(--ink-faint); }
+  .upload-zone p { font-size: 14px; color: var(--ink-soft); font-weight: 500; }
+  .upload-zone p .browse { color: var(--blue); font-weight: 600; }
+  .upload-hint { font-size: 12px; color: var(--ink-faint); margin-top: 5px; font-weight: 400; }
+  .filename {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; color: var(--ink); margin-top: 10px; font-weight: 600;
+  }
+  .filename .clear-file {
+    background: none; border: none; cursor: pointer; color: var(--ink-faint);
+    font-size: 15px; line-height: 1; padding: 2px 4px;
+  }
+  .filename .clear-file:hover { color: var(--wax); }
+  #file-input { display: none; }
+
+  .divider {
+    display: flex; align-items: center; gap: 14px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-faint); margin: 1.5rem 0;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--rule-soft); }
+
+  textarea {
+    width: 100%; min-height: 130px; padding: 14px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    background: var(--surface); color: var(--ink);
+    font-size: 14px; resize: vertical; outline: none;
+    transition: border-color 0.15s; line-height: 1.7;
+  }
+  textarea:focus { border-color: var(--blue); }
+  textarea::placeholder { color: var(--ink-faint); }
+
+  .intake-actions {
+    display: flex; gap: 12px; align-items: center; margin-top: 1.25rem; flex-wrap: wrap;
+  }
+  select {
+    padding: 10px 32px 10px 12px; font-size: 13px; font-weight: 500;
+    border: 1px solid var(--rule); border-radius: 4px;
+    background: var(--surface); color: var(--ink); cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23939a93' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center;
+  }
+
+  .btn-primary {
+    flex: 1; min-width: 200px;
+    padding: 11px 22px; font-size: 14px; font-weight: 600;
+    background: var(--blue); color: #fffdf9;
+    border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  [data-theme="dark"] .btn-primary { color: #141814; }
+  .btn-primary:hover:not(:disabled) { background: var(--blue-hover); }
+  .btn-primary:disabled { opacity: 0.55; cursor: wait; }
+
+  .intake-note {
+    font-size: 12px; color: var(--ink-faint); margin-top: 14px; line-height: 1.6;
+  }
+
+  /* ---------- error banner ---------- */
+  .error-banner {
+    display: none;
+    margin-top: 1.25rem; padding: 12px 14px;
+    border: 1px solid var(--wax); border-left-width: 3px; border-radius: 4px;
+    background: var(--wax-bg); color: var(--ink);
+    font-size: 13px; line-height: 1.55;
+  }
+  .error-banner.visible { display: block; }
+  .error-banner strong { color: var(--wax); }
+
+  /* ---------- loading ---------- */
+  .loading { display: none; margin: 2rem 0 0; text-align: center; }
+  .loading.visible { display: block; }
+  .loading-steps {
+    font-family: var(--serif); font-style: italic;
+    font-size: 15px; color: var(--ink-soft);
+  }
+
+  /* ---------- results ---------- */
+  .hidden { display: none; }
+  #results { margin-top: 2.5rem; }
+
+  .doc-sheet { padding: 2.5rem 2.5rem 2rem; }
+  @media (max-width: 560px) { .doc-sheet { padding: 1.75rem 1.25rem; } .intake { padding: 1.25rem; } }
+
+  .doc-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem;
+  }
+  .doc-meta { min-width: 0; }
+  .badge {
+    display: inline-block; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    background: var(--badge-bg); color: var(--ink-soft);
+    padding: 4px 10px; border-radius: 3px; margin-bottom: 10px;
+  }
+  .parties {
+    font-family: var(--serif); font-size: 18px; line-height: 1.4; color: var(--ink);
+  }
+  .parties .vs { font-style: italic; color: var(--ink-faint); font-size: 15px; padding: 0 4px; }
+
+  .btn-ghost {
+    padding: 8px 14px; font-size: 13px; font-weight: 600;
+    background: none; color: var(--blue);
+    border: 1px solid var(--rule); border-radius: 4px; cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+  }
+  .btn-ghost:hover { border-color: var(--blue); background: var(--blue-soft); }
+
+  /* section system */
+  .doc-section { margin-top: 2.25rem; }
+  .section-head {
+    display: flex; align-items: baseline; gap: 12px; margin-bottom: 1rem;
+  }
+  .section-no {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+    color: var(--ink-faint); flex-shrink: 0;
+  }
+  .section-title {
+    font-family: var(--serif); font-size: 19px; font-weight: 400; color: var(--ink);
+  }
+  .section-head::after { content: ''; flex: 1; height: 1px; background: var(--rule-soft); align-self: center; }
+
+  .summary-text {
+    font-family: var(--serif); font-size: 17px; line-height: 1.75; color: var(--ink);
+  }
+
+  .clause { padding: 0.9rem 0; border-bottom: 1px solid var(--rule-soft); }
+  .clause:last-child { border-bottom: none; }
+  .clause-title {
+    font-family: var(--serif); font-size: 15.5px; font-weight: 700;
+    color: var(--ink); margin-bottom: 4px;
+  }
+  .clause-body { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+
+  /* red flags — wax annotations */
+  .flag {
+    border-left: 3px solid var(--wax);
+    background: var(--wax-bg);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 16px; margin-bottom: 10px;
+  }
+  .flag-clause {
+    font-family: var(--serif); font-size: 15px; font-weight: 700;
+    color: var(--wax); margin-bottom: 4px;
+  }
+  .flag-concern { font-size: 14px; color: var(--ink-soft); line-height: 1.7; }
+  .no-flags {
+    font-size: 14px; color: var(--ink-faint); font-style: italic; font-family: var(--serif);
+  }
+
+  /* obligations */
+  .obligations-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.75rem;
+  }
+  @media (max-width: 560px) { .obligations-grid { grid-template-columns: 1fr; } }
+  .ob-col-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-soft); padding-bottom: 8px; border-bottom: 1px solid var(--rule);
+    margin-bottom: 10px;
+  }
+  .obligation {
+    font-size: 14px; color: var(--ink-soft); line-height: 1.65;
+    padding: 6px 0 6px 16px; position: relative;
+  }
+  .obligation::before {
+    content: '—'; position: absolute; left: 0; color: var(--ink-faint);
+  }
+  .obligation.empty { color: var(--ink-faint); font-style: italic; padding-left: 0; }
+  .obligation.empty::before { content: none; }
+
+  /* glossary */
+  .glossary-item { padding: 0.75rem 0; border-bottom: 1px solid var(--rule-soft); }
+  .glossary-item:last-child { border-bottom: none; }
+  .glossary-term {
+    font-family: var(--serif); font-style: italic; font-size: 15.5px;
+    color: var(--ink); margin-bottom: 3px;
+  }
+  .glossary-def { font-size: 14px; color: var(--ink-soft); line-height: 1.65; }
+
+  /* ---------- chat ---------- */
+  .chat-sheet { margin-top: 1.5rem; padding: 1.75rem; }
+  .chat-messages {
+    max-height: 380px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 10px;
+    margin: 1rem 0 1.25rem;
+  }
+  .msg {
+    max-width: 85%; padding: 10px 14px; font-size: 14px; line-height: 1.65;
+    border-radius: 6px; white-space: pre-wrap; word-wrap: break-word;
+  }
+  .msg.ai {
+    align-self: flex-start;
+    background: var(--paper); border: 1px solid var(--rule-soft); color: var(--ink);
+  }
+  .msg.user {
+    align-self: flex-end;
+    background: var(--blue); color: #fffdf9;
+  }
+  [data-theme="dark"] .msg.user { color: #141814; }
+
+  .chat-input-row { display: flex; gap: 10px; }
+  .chat-input-row input {
+    flex: 1; padding: 11px 14px; font-size: 14px;
+    border: 1px solid var(--rule); border-radius: 4px;
+    background: var(--surface); color: var(--ink); outline: none;
+    transition: border-color 0.15s;
+  }
+  .chat-input-row input:focus { border-color: var(--blue); }
+  .chat-input-row input::placeholder { color: var(--ink-faint); }
+  .btn-send {
+    padding: 11px 18px; font-size: 14px; font-weight: 600;
+    background: var(--blue); color: #fffdf9;
+    border: none; border-radius: 4px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  [data-theme="dark"] .btn-send { color: #141814; }
+  .btn-send:hover:not(:disabled) { background: var(--blue-hover); }
+  .btn-send:disabled { opacity: 0.55; cursor: wait; }
+
+  /* ---------- footer ---------- */
+  .colophon {
+    margin-top: 3rem; padding-top: 1.25rem; border-top: 1px solid var(--rule);
+    font-size: 12px; color: var(--ink-faint); line-height: 1.7;
+  }
+
+  /* ============ graphics & motion ============ */
+
+  /* ghost section-mark watermark */
+  .watermark {
+    position: fixed; top: -40px; right: -20px;
+    font-family: var(--serif); font-size: 340px; line-height: 1;
+    color: var(--ink); opacity: 0.035;
+    pointer-events: none; user-select: none; z-index: 0;
+  }
+  [data-theme="dark"] .watermark { opacity: 0.05; }
+  .app { position: relative; z-index: 1; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes stampIn {
+    0% { opacity: 0; transform: scale(1.25) rotate(-3deg); }
+    65% { opacity: 1; transform: scale(0.98) rotate(0.4deg); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes sealStamp {
+    0% { opacity: 0; transform: scale(1.6) rotate(-14deg); }
+    60% { opacity: 1; transform: scale(0.94) rotate(2deg); }
+    100% { opacity: 1; transform: scale(1) rotate(-6deg); }
+  }
+  @keyframes ruleDraw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes scanSweep {
+    0% { transform: translateY(0); opacity: 0; }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { transform: translateY(44px); opacity: 0; }
+  }
+  @keyframes blink { 0%, 80%, 100% { opacity: 0.25; } 40% { opacity: 1; } }
+  @keyframes floatIcon {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  /* page-load sequence */
+  .masthead .eyebrow,
+  .masthead h1,
+  .masthead .lede { animation: fadeUp 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+  .masthead h1 { animation-delay: 0.08s; }
+  .masthead .lede { animation-delay: 0.16s; }
+  .intake { animation: fadeUp 0.55s cubic-bezier(0.2, 0.7, 0.3, 1) 0.26s both; }
+  .masthead-rule { transform-origin: left; animation: ruleDraw 0.7s cubic-bezier(0.2, 0.7, 0.3, 1) 0.3s both; }
+
+  /* wax seal */
+  .seal {
+    width: 58px; height: 58px; flex-shrink: 0;
+    transform: rotate(-6deg);
+    animation: sealStamp 0.6s cubic-bezier(0.2, 0.8, 0.3, 1.1) 0.55s both;
+    filter: drop-shadow(0 2px 3px rgba(28,36,32,0.18));
+  }
+  .seal .seal-bg { fill: var(--wax); }
+  .seal .seal-ring { stroke: var(--wax-bg); }
+  .seal .seal-glyph { fill: var(--wax-bg); font-family: var(--serif); font-size: 26px; }
+  .masthead-id { display: flex; align-items: center; gap: 18px; }
+  @media (max-width: 480px) { .seal { display: none; } }
+
+  /* upload zone life */
+  .upload-zone:hover .upload-icon,
+  .upload-zone.drag-over .upload-icon {
+    animation: floatIcon 1.6s ease-in-out infinite;
+    color: var(--blue);
+  }
+  .upload-zone.drag-over { transform: scale(1.005); }
+  .upload-zone { transition: border-color 0.15s, background 0.15s, transform 0.15s; }
+  .filename { animation: fadeUp 0.3s ease both; }
+
+  /* buttons get a press */
+  .btn-primary, .btn-send, .btn-ghost {
+    transition: background 0.15s, border-color 0.15s, transform 0.12s, box-shadow 0.15s;
+  }
+  .btn-primary:hover:not(:disabled), .btn-send:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(35,74,120,0.25);
+  }
+  .btn-primary:active:not(:disabled), .btn-send:active:not(:disabled),
+  .btn-ghost:active { transform: translateY(0); box-shadow: none; }
+
+  /* loading: a document being read */
+  .scan-doc { display: block; margin: 0 auto 14px; overflow: visible; }
+  .scan-doc .paper {
+    fill: var(--surface); stroke: var(--rule); stroke-width: 1.5;
+  }
+  .scan-doc .doc-line { stroke: var(--rule); stroke-width: 3; stroke-linecap: round; }
+  .scan-doc .doc-line.short { stroke: var(--rule-soft); }
+  .scan-doc .scan-beam {
+    fill: var(--blue); opacity: 0.18;
+    animation: scanSweep 2.2s ease-in-out infinite;
+  }
+  [data-theme="dark"] .scan-doc .scan-beam { opacity: 0.3; }
+
+  /* results: staggered reveal */
+  .revealed .doc-section, .revealed .doc-head {
+    animation: fadeUp 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  .revealed .doc-head { animation-delay: 0s; }
+  .revealed .doc-section:nth-of-type(2) { animation-delay: 0.08s; }
+  .revealed .doc-section:nth-of-type(3) { animation-delay: 0.16s; }
+  .revealed .doc-section:nth-of-type(4) { animation-delay: 0.24s; }
+  .revealed .doc-section:nth-of-type(5) { animation-delay: 0.32s; }
+  .revealed .doc-section:nth-of-type(6) { animation-delay: 0.40s; }
+  .revealed .chat-sheet { animation: fadeUp 0.5s cubic-bezier(0.2, 0.7, 0.3, 1) 0.48s both; }
+
+  /* red flags stamp in after their section appears */
+  .revealed .flag { animation: stampIn 0.45s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+  .revealed .flag:nth-child(1) { animation-delay: 0.42s; }
+  .revealed .flag:nth-child(2) { animation-delay: 0.52s; }
+  .revealed .flag:nth-child(3) { animation-delay: 0.62s; }
+  .revealed .flag:nth-child(4) { animation-delay: 0.72s; }
+  .revealed .flag:nth-child(n+5) { animation-delay: 0.8s; }
+
+  /* hover: clauses & glossary get an ink rule that draws in */
+  .clause, .glossary-item { position: relative; transition: padding-left 0.18s ease; }
+  .clause::before, .glossary-item::before {
+    content: ''; position: absolute; left: 0; top: 14px; bottom: 14px;
+    width: 2px; background: var(--blue);
+    transform: scaleY(0); transform-origin: top;
+    transition: transform 0.18s ease;
+  }
+  .clause:hover, .glossary-item:hover { padding-left: 14px; }
+  .clause:hover::before, .glossary-item:hover::before { transform: scaleY(1); }
+
+  /* summary drop cap */
+  .summary-text::first-letter {
+    font-size: 3.1em; float: left; line-height: 0.82;
+    padding: 4px 10px 0 0; font-weight: 700; color: var(--ink);
+  }
+
+  /* chat motion */
+  .msg { animation: fadeUp 0.28s ease both; }
+  .thinking-dots span {
+    display: inline-block; animation: blink 1.2s infinite;
+  }
+  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+<div class="watermark" aria-hidden="true">§</div>
+<div class="app">
+
+  <header class="masthead">
+    <div class="masthead-top">
+      <div class="masthead-id">
+        <svg class="seal" viewBox="0 0 58 58" aria-hidden="true">
+          <circle class="seal-bg" cx="29" cy="29" r="28"/>
+          <circle class="seal-ring" cx="29" cy="29" r="23" fill="none" stroke-width="1.4" stroke-dasharray="3 3.4"/>
+          <text class="seal-glyph" x="29" y="38" text-anchor="middle">§</text>
+        </svg>
+        <div>
+          <div class="eyebrow">Document analysis</div>
+          <h1>Legal Document Explainer</h1>
+          <p class="lede">Upload a contract, lease, or agreement and get a plain-English breakdown — what it says, what you owe, and <em>what to watch out for</em>. This is an explanation, not legal advice.</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button class="link-btn" id="logout-btn" type="button">Sign out</button>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </button>
+      </div>
+    </div>
+    <hr class="masthead-rule">
+  </header>
+
+  <section class="sheet intake" aria-label="Document input">
+    <div class="upload-zone" id="upload-zone" role="button" tabindex="0" aria-label="Upload a document">
+      <svg class="upload-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+      <p>Drop a document here or <span class="browse">browse files</span></p>
+      <p class="upload-hint">PDF, DOCX, or TXT — up to 10 MB</p>
+      <div class="filename hidden" id="filename-display">
+        <span id="filename-text"></span>
+        <button class="clear-file" id="clear-file" aria-label="Remove file" title="Remove file">&times;</button>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.docx,.txt,.doc" />
+    </div>
+
+    <div class="divider">or paste the text</div>
+
+    <textarea id="text-input" placeholder="Paste the full text of the document here…"></textarea>
+
+    <div class="intake-actions">
+      <select id="doc-type" aria-label="Document type">
+        <option value="auto">Detect type automatically</option>
+        <option value="contract">Contract</option>
+        <option value="lease">Lease</option>
+        <option value="nda">NDA</option>
+        <option value="employment">Employment agreement</option>
+        <option value="terms of service">Terms of service</option>
+        <option value="other">Other</option>
+      </select>
+      <button class="btn-primary" id="analyze-btn" onclick="analyze()">Explain this document</button>
+    </div>
+
+    <div class="error-banner" id="error-banner" role="alert"></div>
+
+    <p class="intake-note">Documents are processed for analysis and are not stored.</p>
+  </section>
+
+  <div class="loading" id="loading" aria-live="polite">
+    <svg class="scan-doc" width="64" height="76" viewBox="0 0 64 76" aria-hidden="true">
+      <rect class="paper" x="6" y="4" width="52" height="68" rx="3"/>
+      <line class="doc-line" x1="14" y1="18" x2="50" y2="18"/>
+      <line class="doc-line short" x1="14" y1="27" x2="42" y2="27"/>
+      <line class="doc-line" x1="14" y1="36" x2="50" y2="36"/>
+      <line class="doc-line short" x1="14" y1="45" x2="38" y2="45"/>
+      <line class="doc-line" x1="14" y1="54" x2="46" y2="54"/>
+      <rect class="scan-beam" x="10" y="13" width="44" height="9" rx="2"/>
+    </svg>
+    <div class="loading-steps" id="loading-step">Reading document…</div>
+  </div>
+
+  <section id="results" class="hidden" aria-label="Analysis results">
+    <div class="sheet doc-sheet">
+
+      <div class="doc-head">
+        <div class="doc-meta">
+          <span class="badge" id="doc-type-badge">Document</span>
+          <div class="parties" id="parties-line"></div>
+        </div>
+        <button class="btn-ghost" onclick="downloadPDF()">Download PDF</button>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-head"><span class="section-no">§ 01</span><span class="section-title">Summary</span></div>
+        <p class="summary-text" id="summary"></p>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-head"><span class="section-no">§ 02</span><span class="section-title">Key clauses</span></div>
+        <div id="clauses"></div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-head"><span class="section-no">§ 03</span><span class="section-title">Watch out for</span></div>
+        <div id="red-flags"></div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-head"><span class="section-no">§ 04</span><span class="section-title">Obligations</span></div>
+        <div class="obligations-grid">
+          <div>
+            <div class="ob-col-label" id="party-a-label">Party A must</div>
+            <div id="obligations-a"></div>
+          </div>
+          <div>
+            <div class="ob-col-label" id="party-b-label">Party B must</div>
+            <div id="obligations-b"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="doc-section">
+        <div class="section-head"><span class="section-no">§ 05</span><span class="section-title">Glossary</span></div>
+        <div id="glossary"></div>
+      </div>
+
+    </div>
+
+    <div class="sheet chat-sheet">
+      <div class="section-head"><span class="section-no">§ 06</span><span class="section-title">Ask about this document</span></div>
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-input-row">
+        <input type="text" id="chat-input" placeholder="e.g. What happens if I terminate early?" />
+        <button class="btn-send" id="chat-send" onclick="sendChat()">Ask</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="colophon">
+    This tool explains documents in plain English. It does not provide legal advice, and its analysis may be incomplete or imperfect — for decisions that matter, consult a qualified lawyer.
+  </footer>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+  let uploadedFile = null;
+  let analysisJson = '';
+  let sourceText = '';
+  let chatHistory = [];
+  let lastResult = null;
+  let loadingTimer = null;
+
+  // ---------- theme ----------
+  const savedTheme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  document.getElementById('theme-toggle').addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', async () => {
+    await fetch('/logout', { method: 'POST' }).catch(() => {});
+    window.location.reload();
+  });
+
+  // ---------- file handling ----------
+  const zone = document.getElementById('upload-zone');
+  const fileInput = document.getElementById('file-input');
+  const ALLOWED = ['pdf', 'docx', 'txt', 'doc'];
+
+  zone.addEventListener('click', e => {
+    if (e.target.id !== 'clear-file') fileInput.click();
+  });
+  zone.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+  });
+  fileInput.addEventListener('change', e => setFile(e.target.files[0]));
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.classList.remove('drag-over');
+    setFile(e.dataTransfer.files[0]);
+  });
+  document.getElementById('clear-file').addEventListener('click', e => {
+    e.stopPropagation(); clearFile();
+  });
+
+  function setFile(f) {
+    if (!f) return;
+    hideError();
+    const ext = f.name.toLowerCase().split('.').pop();
+    if (!ALLOWED.includes(ext)) {
+      showError('Unsupported file type', 'Upload a PDF, DOCX, or TXT file.');
+      return;
+    }
+    if (f.size > 10 * 1024 * 1024) {
+      showError('File too large', 'The limit is 10 MB. Try splitting the document or pasting the relevant text.');
+      return;
+    }
+    uploadedFile = f;
+    document.getElementById('filename-text').textContent = f.name;
+    document.getElementById('filename-display').classList.remove('hidden');
+  }
+
+  function clearFile() {
+    uploadedFile = null;
+    fileInput.value = '';
+    document.getElementById('filename-display').classList.add('hidden');
+  }
+
+  // ---------- errors ----------
+  function showError(title, detail) {
+    const el = document.getElementById('error-banner');
+    el.innerHTML = '<strong>' + esc(title) + '.</strong> ' + esc(detail || '');
+    el.classList.add('visible');
+  }
+  function hideError() {
+    document.getElementById('error-banner').classList.remove('visible');
+  }
+
+  // ---------- loading steps ----------
+  const STEPS = ['Reading document…', 'Analyzing clauses…', 'Writing plain English…'];
+  function startLoading() {
+    let i = 0;
+    const stepEl = document.getElementById('loading-step');
+    stepEl.textContent = STEPS[0];
+    document.getElementById('loading').classList.add('visible');
+    loadingTimer = setInterval(() => {
+      i = Math.min(i + 1, STEPS.length - 1);
+      stepEl.textContent = STEPS[i];
+    }, 4000);
+  }
+  function stopLoading() {
+    clearInterval(loadingTimer);
+    document.getElementById('loading').classList.remove('visible');
+  }
+
+  // ---------- analyze ----------
+  async function analyze() {
+    hideError();
+    const text = document.getElementById('text-input').value.trim();
+    const docType = document.getElementById('doc-type').value;
+
+    if (!uploadedFile && !text) {
+      showError('Nothing to analyze', 'Upload a document or paste its text first.');
+      return;
+    }
+
+    const btn = document.getElementById('analyze-btn');
+    btn.disabled = true; btn.textContent = 'Analyzing…';
+    startLoading();
+
+    const formData = new FormData();
+    if (uploadedFile) formData.append('file', uploadedFile);
+    else formData.append('text', text);
+    formData.append('doc_type', docType);
+
+    try {
+      const res = await fetch('/analyze', { method: 'POST', body: formData });
+      if (res.status === 401) { window.location.reload(); return; }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'The server returned an error (' + res.status + '). Try again.');
+      }
+      const data = await res.json();
+      sourceText = data.source_text || '';
+      analysisJson = JSON.stringify(data, null, 2);
+      renderResults(data);
+    } catch (err) {
+      showError('Analysis failed', err.message);
+    } finally {
+      btn.disabled = false; btn.textContent = 'Explain this document';
+      stopLoading();
+    }
+  }
+
+  // ---------- render ----------
+  function renderResults(data) {
+    lastResult = data;
+    const nameA = data.party_a_name || 'Party A';
+    const nameB = data.party_b_name || 'Party B';
+
+    document.getElementById('doc-type-badge').textContent = data.document_type || 'Document';
+    document.getElementById('parties-line').innerHTML =
+      esc(nameA) + ' <span class="vs">and</span> ' + esc(nameB);
+    document.getElementById('summary').textContent = data.summary || 'No summary available.';
+    document.getElementById('party-a-label').textContent = nameA + ' must';
+    document.getElementById('party-b-label').textContent = nameB + ' must';
+
+    document.getElementById('clauses').innerHTML = (data.clauses || []).map(c =>
+      '<div class="clause"><div class="clause-title">' + esc(c.title) + '</div><div class="clause-body">' + esc(c.plain_english) + '</div></div>'
+    ).join('') || '<p class="no-flags">No distinct clauses identified.</p>';
+
+    const flags = data.red_flags || [];
+    document.getElementById('red-flags').innerHTML = flags.length ? flags.map(f =>
+      '<div class="flag"><div class="flag-clause">' + esc(f.clause) + '</div><div class="flag-concern">' + esc(f.concern) + '</div></div>'
+    ).join('') : '<p class="no-flags">No major red flags identified — still read the original before signing.</p>';
+
+    const obA = (data.obligations && data.obligations.party_a) || [];
+    const obB = (data.obligations && data.obligations.party_b) || [];
+    document.getElementById('obligations-a').innerHTML =
+      obA.map(o => '<div class="obligation">' + esc(o) + '</div>').join('') ||
+      '<div class="obligation empty">None specified</div>';
+    document.getElementById('obligations-b').innerHTML =
+      obB.map(o => '<div class="obligation">' + esc(o) + '</div>').join('') ||
+      '<div class="obligation empty">None specified</div>';
+
+    const glossary = data.glossary || [];
+    document.getElementById('glossary').innerHTML = glossary.length ? glossary.map(g =>
+      '<div class="glossary-item"><div class="glossary-term">' + esc(g.term) + '</div><div class="glossary-def">' + esc(g.plain_english) + '</div></div>'
+    ).join('') : '<p class="no-flags">No unusual terms found.</p>';
+
+    document.getElementById('chat-messages').innerHTML =
+      '<div class="msg ai">Ask me anything about this document — deadlines, penalties, what a clause means for you.</div>';
+    chatHistory = [];
+
+    const results = document.getElementById('results');
+    results.classList.remove('hidden');
+    // restart the staggered reveal on every analysis, not just the first
+    results.classList.remove('revealed');
+    void results.offsetWidth;
+    results.classList.add('revealed');
+    results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ---------- pdf export ----------
+  function downloadPDF() {
+    if (!lastResult) return;
+    const data = lastResult;
+    const nameA = data.party_a_name || 'Party A';
+    const nameB = data.party_b_name || 'Party B';
+    const date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+    const pageW = 210;
+    const margin = 20;
+    const contentW = pageW - margin * 2;
+    let y = 0;
+
+    const ink = [28, 36, 32];
+    const gray = [105, 110, 105];
+    const light = [215, 211, 200];
+    const waxBg = [249, 241, 238];
+    const wax = [152, 53, 43];
+
+    function checkPage(needed) {
+      if (y + needed > 275) { doc.addPage(); y = 20; }
+    }
+
+    function sectionLabel(no, text) {
+      checkPage(16);
+      y += 4;
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...gray);
+      doc.text('§ ' + no + '   ' + text.toUpperCase(), margin, y);
+      y += 2.5;
+      doc.setDrawColor(...light);
+      doc.setLineWidth(0.3);
+      doc.line(margin, y, margin + contentW, y);
+      y += 6;
+    }
+
+    function bodyText(text, color, size) {
+      doc.setFontSize(size || 10);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...(color || ink));
+      const lines = doc.splitTextToSize(String(text), contentW);
+      checkPage(lines.length * 5 + 2);
+      doc.text(lines, margin, y);
+      y += lines.length * 5 + 2;
+    }
+
+    function boldText(text, size) {
+      doc.setFontSize(size || 10);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...ink);
+      const lines = doc.splitTextToSize(String(text), contentW);
+      checkPage(lines.length * 5 + 1);
+      doc.text(lines, margin, y);
+      y += lines.length * 5 + 1;
+    }
+
+    // header
+    doc.setFillColor(...ink);
+    doc.rect(0, 0, pageW, 30, 'F');
+    doc.setFontSize(15);
+    doc.setFont('times', 'bold');
+    doc.setTextColor(255, 253, 249);
+    doc.text('Legal Document Analysis', margin, 13);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(175, 180, 175);
+    doc.text((data.document_type || 'Document') + '  ·  ' + nameA + ' and ' + nameB + '  ·  ' + date, margin, 22);
+    y = 40;
+
+    // summary
+    sectionLabel('01', 'Summary');
+    bodyText(data.summary || 'No summary available.');
+    y += 2;
+
+    // clauses
+    if (data.clauses && data.clauses.length) {
+      sectionLabel('02', 'Key clauses');
+      data.clauses.forEach(c => {
+        boldText(c.title, 10);
+        bodyText(c.plain_english, gray, 9.5);
+        y += 2;
+      });
+    }
+
+    // red flags
+    if (data.red_flags && data.red_flags.length) {
+      sectionLabel('03', 'Watch out for');
+      data.red_flags.forEach(f => {
+        const concernLines = doc.splitTextToSize(f.concern, contentW - 12);
+        const boxH = concernLines.length * 5 + 14;
+        checkPage(boxH + 4);
+        doc.setFillColor(...waxBg);
+        doc.rect(margin, y, contentW, boxH, 'F');
+        doc.setFillColor(...wax);
+        doc.rect(margin, y, 1.2, boxH, 'F');
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(...wax);
+        doc.text(String(f.clause), margin + 6, y + 7);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...gray);
+        doc.text(concernLines, margin + 6, y + 13);
+        y += boxH + 5;
+      });
+    }
+
+    // obligations — two column
+    const obA = (data.obligations && data.obligations.party_a) || [];
+    const obB = (data.obligations && data.obligations.party_b) || [];
+    if (obA.length || obB.length) {
+      sectionLabel('04', 'Obligations');
+      const colW = (contentW - 10) / 2;
+
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(...gray);
+      doc.text(nameA.toUpperCase() + ' MUST', margin, y);
+      doc.text(nameB.toUpperCase() + ' MUST', margin + colW + 10, y);
+      y += 6;
+
+      let leftY = y;
+      let rightY = y;
+
+      obA.forEach(o => {
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...ink);
+        const lines = doc.splitTextToSize('— ' + o, colW);
+        doc.text(lines, margin, leftY);
+        leftY += lines.length * 5 + 2;
+      });
+
+      obB.forEach(o => {
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(...ink);
+        const lines = doc.splitTextToSize('— ' + o, colW);
+        doc.text(lines, margin + colW + 10, rightY);
+        rightY += lines.length * 5 + 2;
+      });
+
+      y = Math.max(leftY, rightY) + 6;
+    }
+
+    // glossary
+    const glossary = data.glossary || [];
+    if (glossary.length) {
+      sectionLabel('05', 'Glossary');
+      glossary.forEach(g => {
+        boldText(g.term, 10);
+        bodyText(g.plain_english, gray, 9.5);
+        y += 2;
+      });
+    }
+
+    // footer on every page
+    const total = doc.getNumberOfPages();
+    for (let i = 1; i <= total; i++) {
+      doc.setPage(i);
+      doc.setDrawColor(...light);
+      doc.setLineWidth(0.3);
+      doc.line(margin, 282, margin + contentW, 282);
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(...gray);
+      doc.text('Generated by Legal Document Explainer — not legal advice', margin, 287);
+      doc.text('Page ' + i + ' of ' + total, pageW - margin, 287, { align: 'right' });
+    }
+
+    const filename = (data.document_type || 'document').toLowerCase().replace(/\s+/g, '-') + '-analysis.pdf';
+    doc.save(filename);
+  }
+
+  // ---------- chat ----------
+  document.getElementById('chat-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') sendChat();
+  });
+
+  async function sendChat() {
+    const input = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('chat-send');
+    const msg = input.value.trim();
+    if (!msg || sendBtn.disabled) return;
+    input.value = '';
+    sendBtn.disabled = true;
+    appendMessage('user', msg);
+    chatHistory.push({ role: 'user', content: msg });
+    const thinkingEl = appendMessage('ai', '');
+    thinkingEl.innerHTML = 'Reading the document<span class="thinking-dots"><span>.</span><span>.</span><span>.</span></span>';
+    try {
+      // slice(0, -1) excludes the current message — it's sent separately
+      // as `message`, so including it in history would duplicate it
+      const res = await fetch('/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: msg,
+          analysis: analysisJson,
+          source_text: sourceText,
+          history: chatHistory.slice(0, -1)
+        })
+      });
+      if (res.status === 401) { window.location.reload(); return; }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || 'server error');
+      }
+      const data = await res.json();
+      thinkingEl.textContent = data.response;
+      chatHistory.push({ role: 'assistant', content: data.response });
+    } catch (err) {
+      thinkingEl.textContent = 'That didn\u2019t go through — try asking again.';
+      chatHistory.pop();
+    } finally {
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  function appendMessage(role, text) {
+    const box = document.getElementById('chat-messages');
+    const el = document.createElement('div');
+    el.className = 'msg ' + role;
+    el.textContent = text;
+    box.appendChild(el);
+    box.scrollTop = box.scrollHeight;
+    return el;
+  }
+
+  function esc(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+</body>
+</html>
